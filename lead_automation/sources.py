@@ -61,10 +61,11 @@ def from_csv(path: str | Path, source: str = "ads_csv") -> list[Lead]:
 
 def from_web_form(payload: dict) -> Lead:
     """Website contact form payload (also what the webhook receives)."""
+    employees = _to_number(payload.get("employees"))  # forms may send "120" or "about 50" as text
     return Lead(
         name=payload.get("name", ""), email=payload.get("email"), phone=payload.get("phone"),
         company=payload.get("company"), message=payload.get("message", ""), source="website",
-        budget=_to_number(payload.get("budget")), employees=payload.get("employees"),
+        budget=_to_number(payload.get("budget")), employees=int(employees) if employees else None,
         received_at=_parse_time(payload.get("submitted_at")),
     )
 
