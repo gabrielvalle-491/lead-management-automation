@@ -46,7 +46,7 @@ leads go cold because no one followed up in time.
 pip install -r requirements.txt
 
 python -m lead_automation.generate_samples samples   # demo leads in the 3 formats
-python -m lead_automation samples --out output --no-llm
+python -m lead_automation samples --out output --no-llm --now 2026-10-01T10:00
 ```
 
 ```
@@ -97,7 +97,7 @@ lead_automation/
 ├── report.py            # Excel report + CRM CSV
 ├── webhook.py           # real-time capture endpoint (stdlib only)
 └── generate_samples.py
-tests/                   # 12 pytest tests incl. a live webhook test
+tests/                   # 17 pytest tests incl. a live webhook test
 ```
 
 ## Tests
