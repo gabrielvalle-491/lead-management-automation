@@ -15,6 +15,7 @@ from lead_automation.sources import from_csv, from_email_folder, from_json_folde
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Run the batch pipeline over a samples folder and write the reports. Returns the exit code."""
     parser = argparse.ArgumentParser(description="Capture, classify and organize leads")
     parser.add_argument("samples", type=Path, help="Folder with *.csv, web_forms/*.json and emails/*.eml")
     parser.add_argument("--out", type=Path, default=Path("output"))

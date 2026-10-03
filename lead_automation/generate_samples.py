@@ -39,6 +39,7 @@ NOISE = [
 
 
 def generate(folder: Path, seed: int = 3) -> None:
+    """Write deterministic demo leads (CSV, JSON web forms, .eml emails) into `folder`."""
     rng = random.Random(seed)
     now = datetime(2026, 10, 1, 9, 0)
     (folder / "web_forms").mkdir(parents=True, exist_ok=True)
@@ -75,6 +76,7 @@ def generate(folder: Path, seed: int = 3) -> None:
 
 
 def main() -> None:
+    """Command-line entry point for generating the demo samples."""
     parser = argparse.ArgumentParser()
     parser.add_argument("folder", type=Path, nargs="?", default=Path("samples"))
     args = parser.parse_args()

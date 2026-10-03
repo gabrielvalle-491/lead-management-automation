@@ -35,6 +35,7 @@ SOURCE_POINTS = {"website": 15, "email": 10, "referral": 20, "ads_csv": 5}
 
 
 def keyword_intent(text: str) -> str:
+    """Classify intent with keyword rules (first match wins; defaults to "sales")."""
     text = text.lower()
     for intent in ("spam", "job_application", "support", "partnership", "sales"):
         if any(word in text for word in KEYWORDS[intent]):
@@ -72,6 +73,7 @@ def llm_intent(text: str) -> str | None:
 
 
 def classify_intent(lead: Lead, use_llm: bool = True) -> str:
+    """Return the lead's intent, using the LLM when allowed and available, keywords otherwise."""
     text = f"{lead.message} {lead.company or ''}"
     return (llm_intent(text) if use_llm else None) or keyword_intent(text)
 

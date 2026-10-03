@@ -10,6 +10,7 @@ from pathlib import Path
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill
 from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.worksheet import Worksheet
 
 TIER_COLORS = {"Hot": "F8CBAD", "Warm": "FFE699", "Cold": "DDEBF7", "Disqualified": "E7E6E6"}
 HEADER_FILL = PatternFill("solid", fgColor="7030A0")
@@ -18,7 +19,7 @@ COLUMNS = ["score", "tier", "intent", "name", "company", "email", "phone", "sour
            "next_action", "follow_up", "times_seen", "reasons", "message"]
 
 
-def _sheet(wb: Workbook, title: str, rows: list[dict], first: bool = False):
+def _sheet(wb: Workbook, title: str, rows: list[dict], first: bool = False) -> Worksheet:
     ws = wb.active if first else wb.create_sheet(title)
     ws.title = title
     ws.append([c.replace("_", " ").title() for c in COLUMNS])
@@ -40,6 +41,7 @@ def _sheet(wb: Workbook, title: str, rows: list[dict], first: bool = False):
 
 
 def write_excel(leads: list[dict], due: list[dict], output: str | Path) -> Path:
+    """Write the Summary / Pipeline / Follow-ups due workbook and return its path."""
     output = Path(output)
     output.parent.mkdir(parents=True, exist_ok=True)
     wb = Workbook()

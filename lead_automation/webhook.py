@@ -16,7 +16,8 @@ from lead_automation.pipeline import LeadPipeline
 from lead_automation.sources import from_web_form
 
 
-def make_handler(pipeline: LeadPipeline):
+def make_handler(pipeline: LeadPipeline) -> type[BaseHTTPRequestHandler]:
+    """Build a request handler class bound to `pipeline` (POST /lead)."""
     class Handler(BaseHTTPRequestHandler):
         def _reply(self, status: int, body: dict) -> None:
             data = json.dumps(body).encode()
@@ -26,7 +27,7 @@ def make_handler(pipeline: LeadPipeline):
             self.end_headers()
             self.wfile.write(data)
 
-        def do_POST(self):  # noqa: N802 (http.server naming)
+        def do_POST(self) -> None:  # noqa: N802 (http.server naming)
             if self.path != "/lead":
                 return self._reply(404, {"error": "not found"})
             try:
@@ -42,13 +43,14 @@ def make_handler(pipeline: LeadPipeline):
                 "tier": lead.tier, "score": lead.score, "owner": lead.owner, "next_action": lead.next_action,
             })
 
-        def log_message(self, fmt, *args):  # quieter console
+        def log_message(self, fmt: str, *args: object) -> None:  # quieter console
             pass
 
     return Handler
 
 
 def main() -> None:
+    """Start the webhook server on 127.0.0.1."""
     parser = argparse.ArgumentParser(description="Lead capture webhook")
     parser.add_argument("--db", default="output/leads.db")
     parser.add_argument("--port", type=int, default=8000)

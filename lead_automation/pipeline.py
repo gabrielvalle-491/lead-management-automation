@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS leads (
 
 
 class LeadPipeline:
+    """Deduplicates, classifies, scores, routes and stores leads in SQLite."""
+
     def __init__(self, db_path: str | Path = ":memory:", sales_reps: list[str] | None = None,
                  use_llm: bool = True) -> None:
         # The webhook serves requests from worker threads; a lock keeps writes serialized.
@@ -68,7 +70,8 @@ class LeadPipeline:
         self.conn.commit()
         return lead, True
 
-    def process_many(self, leads: list[Lead]) -> dict:
+    def process_many(self, leads: list[Lead]) -> dict[str, int]:
+        """Process a batch and return counts: received, new and duplicates."""
         stats = {"received": 0, "new": 0, "duplicates": 0}
         for lead in leads:
             stats["received"] += 1
@@ -77,10 +80,12 @@ class LeadPipeline:
         return stats
 
     def all_leads(self) -> list[dict]:
+        """All stored leads, highest score first."""
         rows = self.conn.execute("SELECT * FROM leads ORDER BY score DESC, received_at").fetchall()
         return [dict(r) for r in rows]
 
     def due_follow_ups(self, now: datetime | None = None) -> list[dict]:
+        """Leads whose follow-up time is at or before `now` (default: current time)."""
         limit = (now or datetime.now()).isoformat(timespec="minutes")
         rows = self.conn.execute(
             "SELECT * FROM leads WHERE follow_up IS NOT NULL AND follow_up <= ? ORDER BY follow_up", (limit,)

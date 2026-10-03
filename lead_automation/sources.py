@@ -29,7 +29,7 @@ CSV_COLUMNS = {
 }
 
 
-def _to_number(value) -> float | None:
+def _to_number(value: object) -> float | None:
     if value in (None, ""):
         return None
     digits = re.sub(r"[^\d.]", "", str(value))
@@ -39,12 +39,13 @@ def _to_number(value) -> float | None:
         return None
 
 
-def _pick(row: dict, field: str):
+def _pick(row: dict, field: str) -> str | None:
     lowered = {k.strip().lower(): v for k, v in row.items() if k}
     return next((lowered[c] for c in CSV_COLUMNS[field] if c in lowered and lowered[c]), None)
 
 
 def from_csv(path: str | Path, source: str = "ads_csv") -> list[Lead]:
+    """Read a lead-ads style CSV (column names are matched flexibly, see CSV_COLUMNS)."""
     leads = []
     with open(path, encoding="utf-8-sig", newline="") as fh:
         for row in csv.DictReader(fh):
@@ -69,10 +70,12 @@ def from_web_form(payload: dict) -> Lead:
 
 
 def from_json_folder(folder: str | Path) -> list[Lead]:
+    """Load every *.json web form payload in `folder` (missing folder -> empty list)."""
     return [from_web_form(json.loads(p.read_text(encoding="utf-8"))) for p in sorted(Path(folder).glob("*.json"))]
 
 
 def from_email(path: str | Path) -> Lead:
+    """Parse an .eml file, extracting company, phone and budget from the body text."""
     with open(path, "rb") as fh:
         msg = BytesParser(policy=policy.default).parse(fh)
     display_name, address = parseaddr(msg["From"])
@@ -91,10 +94,11 @@ def from_email(path: str | Path) -> Lead:
 
 
 def from_email_folder(folder: str | Path) -> list[Lead]:
+    """Load every *.eml email in `folder` (missing folder -> empty list)."""
     return [from_email(p) for p in sorted(Path(folder).glob("*.eml"))]
 
 
-def _parse_time(value) -> datetime:
+def _parse_time(value: object) -> datetime:
     if not value:
         return datetime.now()
     try:
