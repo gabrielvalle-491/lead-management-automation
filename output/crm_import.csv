@@ -1,0 +1,12 @@
+First Name,Last Name,Email,Phone Number,Company Name,Lead Status,Lead Score,Contact Owner,Original Source
+Sofía,Navarro,snavarro@agroandes.com,+5492664952965,AgroAndes,Hot,100,Sales Rep A,ads_csv
+Lucas,Ferreyra,lucas@tiendaferreyra.com,1147889712,Tienda Ferreyra,Hot,93,Sales Rep B,website
+Laura,Méndez,laura@ferreteriasur.com.ar,+5492664621429,Ferretería Sur,Hot,83,Sales Rep A,ads_csv
+Tomás,Ibarra,tomas.ibarra@hotmail.com,+5492664635017,,Hot,75,Sales Rep B,ads_csv
+Julieta,Sosa,compras@clinicadelsur.com,+5492664551234,Clínica del Sur,Hot,75,Sales Rep A,email
+Nicolás,Bravo,nbravo@constructorabravo.com,1146662812,Constructora Bravo,Hot,70,Sales Rep B,website
+Valentina,Paz,vpaz@inmobiliariapaz.com,1149221280,Inmobiliaria Paz,Warm,53,Sales Rep A,website
+Martín,Ruiz,mruiz@clinicadelsol.com,+5492664497081,Clínica del Sol,Warm,50,Sales Rep B,ads_csv
+Paula,Ortiz,paula.ortiz@gmail.com,+5492664960437,,Warm,50,Sales Rep A,ads_csv
+Diego,Ramos,dramos@logisticacuyo.com,+5492664136758,Logística Cuyo,Warm,50,Sales Rep B,ads_csv
+Carla,Vega,carla@estudiovega.com,+5492664609067,Estudio Vega,Cold,33,Sales Rep A,ads_csv

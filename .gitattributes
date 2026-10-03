@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.pdf binary
+*.xlsx binary
+*.jpg binary
+*.png binary
+*.eml text eol=lf
