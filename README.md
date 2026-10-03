@@ -1,5 +1,7 @@
 # Lead Management Automation
 
+Español: [README.es.md](README.es.md)
+
 ![CI](https://github.com/gabrielvalle-491/lead-management-automation/actions/workflows/ci.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -109,6 +111,18 @@ pytest -q
 - All leads are synthetic demo data. No real people or companies.
 - Scoring weights live in `classify.py` and are meant to be tuned with the sales team.
 - Built with Python and [Claude Code](https://claude.com/claude-code) as an AI pair programmer.
+
+## How I would deliver this to a client
+
+If you hire me for this, I would:
+
+- **Agree on the inputs first:** your Lead Ads CSV exports (any of the column names in `sources.py`, e.g. `full_name` / `nombre`), website form submissions as JSON (or pushed live to the webhook), and emails to `sales@` saved as `.eml` files.
+- **Set up one folder and one command:** you drop the week's files into the input folder (`*.csv`, `web_forms/`, `emails/`) and run `python -m lead_automation <folder> --out output`, or I schedule it as a Windows Task Scheduler / cron job every Monday morning.
+- **Tune the rules with your sales team:** scoring weights, keywords, sales rep names and follow-up times live in `classify.py` and `pipeline.py`, so they can be adjusted without touching the rest.
+- **Hand over the outputs you actually use:** `lead_pipeline.xlsx` (Summary, Pipeline, Follow-ups due) for the team and `crm_import.csv` for HubSpot / Pipedrive.
+- **Make problems visible:** every run prints a summary (leads received, duplicates merged, tiers, follow-ups due); the command exits with a non-zero code (and a Python traceback) on bad arguments or a file it cannot parse, such as broken JSON, so a scheduled task shows it as failed; an empty or wrong folder shows up as `Leads received: 0`; the webhook answers `400` for invalid JSON and `422` when a lead has no email or phone.
+- **Keep it working offline:** without an API key (or if the AI call fails) intent falls back to the keyword rules, so the weekly run never depends on an external service.
+- **Document and test it:** a short run guide for your team plus the automated tests (`pytest -q`) so changes to the rules can be checked before they are used.
 
 ## Author
 
